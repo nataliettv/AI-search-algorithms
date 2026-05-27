@@ -140,22 +140,26 @@ def dfs():
 
     utils.encabezado(
         "BUSQUEDA POR PROFUNDIDAD (DFS)",
-        "Va al fondo antes de retroceder. Recursiva con backtracking."
+        "Va al fondo antes de retroceder. Recursiva con backtracking. Usa PILA LIFO."
     )
 
     visitados    = set()
-    pasos_hechos = [0]   # lista para poder modificarla dentro de la funcion
+    pasos_hechos = [0]
+    pila_visual  = [g.inicio]  # pila para mostrar visualmente, empieza con el inicio
 
     def explorar(nodo, camino, costo, nivel):
-        sangria = "    " + "  " * nivel   # sangria visual segun profundidad
+        sangria = "    " + "  " * nivel
 
         if nodo in visitados:
+            print(f"{sangria}'{nodo}' ya fue visitado, lo salto.")
             return None, 0
         visitados.add(nodo)
         pasos_hechos[0] += 1
 
-        print(f"{sangria}Paso {pasos_hechos[0]}: Entro a '{nodo}'  (nivel {nivel}, costo: {costo})")
-        print(f"{sangria}          Camino: {' -> '.join(camino)}")
+        print(f"\n{sangria}Paso {pasos_hechos[0]}: POP: '{nodo}'")
+        print(f"{sangria}          PILA ACTUAL: {list(pila_visual)}")
+        print(f"{sangria}          NODOS VISITADOS HASTA AHORA: {visitados}")
+        print(f"{sangria}          Camino hasta aqui: {' -> '.join(camino)}")
 
         if nodo == g.meta:
             print(f"{sangria}          *** META ENCONTRADA ***")
@@ -163,17 +167,27 @@ def dfs():
 
         vecinos = list(g.grafo.get(nodo, {}).items())
         if vecinos:
-            print(f"{sangria}          Vecinos a explorar: {[v for v,_ in vecinos]}")
+            nombres_vecinos = [v for v, _ in vecinos if v not in visitados]
+            if nombres_vecinos:
+                # en DFS los vecinos se apilan al reves porque LIFO saca el ultimo
+                for v in nombres_vecinos:
+                    pila_visual.append(v)
+                print(f"{sangria}          PUSH vecinos: {nombres_vecinos}")
+                print(f"{sangria}          PILA ACTUAL (despues de push): {list(pila_visual)}")
+            else:
+                print(f"{sangria}          Sin vecinos nuevos.")
         else:
             print(f"{sangria}          Sin vecinos. Retrocediendo...")
         print()
 
-        # llamo recursivamente a cada vecino (esto es lo que lo hace DFS)
         for vecino, peso in vecinos:
-            encontrado, costo_total = explorar(vecino, camino + [vecino], costo + peso, nivel + 1)
-            if encontrado:
-                return encontrado, costo_total
+            if vecino not in visitados:
+                encontrado, costo_total = explorar(vecino, camino + [vecino], costo + peso, nivel + 1)
+                if encontrado:
+                    return encontrado, costo_total
 
+        if vecino in pila_visual:
+            pila_visual.remove(nodo)
         print(f"{sangria}Ramas de '{nodo}' agotadas. Retrocedo un nivel.")
         return None, 0
 

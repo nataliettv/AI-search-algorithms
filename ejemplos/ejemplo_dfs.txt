@@ -24,12 +24,14 @@
 # ================================================================
 
 ESTADOS
-A G
+D T
 
 TRANSICIONES
-A B 1
-A C 1
-B D 1
-B E 1
-C F 1
-E G 1
+D B 1
+D C 2
+B H 3
+C R 4
+R H 5
+H A 6
+H T 7
+H D 8
