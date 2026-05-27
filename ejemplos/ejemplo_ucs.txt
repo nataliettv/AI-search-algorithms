@@ -1,0 +1,35 @@
+# ================================================================
+#   EJEMPLO PARA BUSQUEDA POR COSTO UNIFORME (UCS)
+# ================================================================
+#
+#   UCS siempre elige el camino con MENOR COSTO ACUMULADO.
+#   Este ejemplo esta disenado para que BFS y UCS den resultados
+#   DISTINTOS, mostrando que UCS es mejor cuando importan los costos.
+#
+#   Grafo:
+#
+#           1           10
+#      A -------> B ---------> G
+#      |                       ^
+#      |    4          2       |
+#      +-------> C ---------> D
+#
+#   Caminos posibles:
+#     A -> B -> G   costo = 1 + 10 = 11
+#     A -> C -> D -> G   costo = 4 + 2 + 1 = 7   <- OPTIMO en costo
+#
+#   BFS elegiria A -> B -> G porque tiene menos pasos (2 saltos).
+#   UCS elegiria A -> C -> D -> G porque tiene menor costo (7).
+#
+#   Esto demuestra por que UCS es mejor cuando los costos importan.
+# ================================================================
+
+ESTADOS
+A G
+
+TRANSICIONES
+A B 1
+A C 4
+B G 10
+C D 2
+D G 1

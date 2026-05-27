@@ -1,0 +1,47 @@
+# ================================================================
+#   COMO LEER ESTE ARCHIVO Y ENTENDER LOS ESTADOS / TRANSICIONES
+# ================================================================
+#
+#   Un ESTADO es simplemente un nodo del grafo.
+#   Puede ser una ciudad, una posicion en un tablero, etc.
+#   Aqui los nombramos con letras (A, B, C...) para simplificar.
+#
+#   Una TRANSICION es la conexion entre dos estados.
+#   Tiene: origen, destino y costo.
+#
+#   El grafo de este ejemplo se ve asi:
+#
+#          1         2
+#      A -----> B -----> D
+#      |        |
+#    4 |      5 |
+#      v        v
+#      C -----> G
+#          3
+#
+#   Lectura: "De A puedo ir a B pagando costo 1"
+#            "De A puedo ir a C pagando costo 4"
+#            "De B puedo ir a D pagando costo 2"
+#            "De B puedo ir a G pagando costo 5"
+#            "De C puedo ir a G pagando costo 3"
+#
+#   El ESTADO INICIAL es A (donde empieza la busqueda).
+#   El ESTADO FINAL   es G (adonde queremos llegar).
+#
+#   BFS no considera costos, solo cantidad de pasos.
+#   Para BFS el mejor camino seria A -> B -> G (2 pasos)
+#   aunque A -> C -> G tambien son 2 pasos.
+# ================================================================
+
+ESTADOS
+D T
+
+TRANSICIONES
+D B 1
+D C 2
+B H 3
+C R 4
+R H 5
+H A 6
+H T 7
+H D 8
