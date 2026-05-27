@@ -194,7 +194,7 @@ def dfs():
     camino, costo = explorar(g.inicio, [g.inicio], 0, 0)
     utils.resultado("DFS", camino, costo, len(visitados))
 
-
+##como saber q se hizo un buen clon ejejejejej
 # ============================================================
 # BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS)
 #
