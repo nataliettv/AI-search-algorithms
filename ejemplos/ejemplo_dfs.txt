@@ -1,7 +1,4 @@
-# ================================================================
-#   EJEMPLO PARA BUSQUEDA POR PROFUNDIDAD (DFS)
-# ================================================================
-#
+# DFS EJEMPLO
 #   DFS va lo mas profundo posible por la primera rama que encuentra.
 #   Si no llega a la meta, retrocede (backtracking) y prueba otra.
 #
@@ -17,21 +14,20 @@
 #
 #   DFS explorara primero la rama izquierda:
 #     A -> B -> D  (llega al fondo, sin vecinos, retrocede)
+#     A -> C -> F  (no encuentra nada)
 #     A -> B -> E -> G  (encuentra la meta!)
 #
-#   Nota: el orden de exploracion depende del orden en que
-#   esten las transiciones en el archivo.
+#    *** el orden de exploracion depende del orden en que
+#   esten las transiciones en el archivo
 # ================================================================
 
 ESTADOS
-D T
+A G
 
 TRANSICIONES
-D B 1
-D C 2
-B H 3
-C R 4
-R H 5
-H A 6
-H T 7
-H D 8
+A B 1
+A C 1
+B D 1
+B E 1
+E G 1
+C F 1

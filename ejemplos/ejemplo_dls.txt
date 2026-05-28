@@ -1,23 +1,27 @@
-# ================================================================
-#   EJEMPLO PARA BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS)
-# ================================================================
+# DLS EJEMPLO
 #
 #   DLS es igual que DFS pero se detiene al llegar al limite.
-#
 #   Con este ejemplo puedes ver que pasa segun el limite que elijas:
 #
 #   Grafo:
 #
-#       A -> B -> C -> D -> G
+#           A
+#          / \
+#         B   C
+#        / \   \
+#       D   E   F
+#            \
+#             G  <- META
 #
-#   La meta G esta a 4 pasos de A.
-#   Niveles:  A=0, B=1, C=2, D=3, G=4
 #
-#   Si pones limite = 3: no llega (G esta en nivel 4), sin solucion.
-#   Si pones limite = 4: llega exactamente a G, encuentra solucion.
-#   Si pones limite = 6: tambien llega, el limite simplemente no se alcanza.
+#   La meta G esta a 4 pasos de A
+#   Niveles:  A=0, B=1, C=1, D=2, E=2, F=2, G=3
 #
-#   Prueba con limite 3 y luego con limite 4 para ver la diferencia.
+#   Si pones limite = 2: no llega (G esta en nivel 3), sin solucion
+#   Si pones limite = 3: llega exactamente a G, encuentra solucion
+#   Si pones limite = 6: tambien llega, el limite simplemente no se alcanza
+#
+#   Prueba con limite 2, 3 y luego con limite 4 para ver la diferencia
 # ================================================================
 
 ESTADOS
@@ -25,6 +29,8 @@ A G
 
 TRANSICIONES
 A B 1
-B C 1
-C D 1
-D G 1
+A C 1
+B D 1
+B E 1
+E G 1
+C F 1

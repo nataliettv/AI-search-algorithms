@@ -62,7 +62,9 @@ def menu():
         elif opcion == "5":  algoritmos.bfs()
         elif opcion == "6":  algoritmos.ucs()
         elif opcion == "7":  algoritmos.dfs()
-        elif opcion == "8":  algoritmos.dls()
+        elif opcion == "8":
+            limite = int(input("\nIngresa el limite de profundidad: "))
+            algoritmos.dls(limite)
         elif opcion == "9":  algoritmos.iddfs()
         elif opcion == "10": algoritmos.avara()
         elif opcion == "11": algoritmos.a_estrella()
@@ -71,7 +73,6 @@ def menu():
             break
         else:
             print("  [!] Opcion invalida, intenta de nuevo.")
-
 
 if __name__ == "__main__":
     menu()

@@ -3,15 +3,9 @@ from collections import deque
 import grafo as g
 import utils
 
+# |---------------------------------------------------------------------------------------------------------------|
 
-# ============================================================
-# BUSQUEDA POR AMPLITUD (BFS)
-#
-# Idea: usa una COLA (FIFO).
-# Explora todos los vecinos del nivel actual antes de bajar.
-# No toma en cuenta costos, solo la cantidad de pasos.
-# Garantiza encontrar el camino con menos pasos (no menor costo).
-# ============================================================
+# BUSQUEDA POR AMPLITUD (BFS) #LISTO
 def bfs():
     if not g.hay_grafo():
         return
@@ -25,6 +19,7 @@ def bfs():
     cola.append( (g.inicio, [g.inicio], 0) )
 
     visitados = set()
+    visitados.add(g.inicio)
     paso = 1
 
     while cola:
@@ -33,24 +28,20 @@ def bfs():
         pendientes = [x[0] for x in cola]
         print(f"\n  Paso {paso}: DEQUEUE: '{nodo}'")
         print(f"           QUEUE ACTUAL: {pendientes}")
-
-        if nodo in visitados:
-            print(f"           '{nodo}' ya fue visitado, lo salto.")
-            continue
-        visitados.add(nodo)
-
         print(f"           NODOS VISITADOS HASTA AHORA: {visitados}")
         print(f"           Camino hasta aquí: {' -> '.join(camino)}")
         # print(f"           Costo acumulado:   {costo}")   # no tan relevante en BFS
 
         if nodo == g.meta:
-            print(f"           *** META ENCONTRADA ***")
+            print(f"\n           *** META ENCONTRADA ***")
             utils.resultado("BFS", camino, costo, len(visitados))
             return
 
         vecinos_nuevos = []
         for vecino, peso in g.grafo.get(nodo, {}).items():
             if vecino not in visitados:
+
+                visitados.add(vecino)  
                 cola.append( (vecino, camino + [vecino], costo + peso) )
                 vecinos_nuevos.append(vecino)
                 # vecinos_nuevos.append(f"{vecino}(c:{costo+peso})")   # con costo
@@ -67,6 +58,7 @@ def bfs():
 
     utils.resultado("BFS", None, 0, len(visitados))
 
+# |---------------------------------------------------------------------------------------------------------------|
 
 # ============================================================
 # BUSQUEDA POR COSTO UNIFORME (UCS)
@@ -125,27 +117,20 @@ def ucs():
 
     utils.resultado("UCS", None, 0, len(visitados))
 
-
-# ============================================================
+# |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA POR PROFUNDIDAD (DFS)
-#
-# Idea: va lo mas profundo posible antes de retroceder.
-# Implementacion RECURSIVA: cada llamada es un nivel mas.
-# Uso sangria para que se vea visualmente la profundidad.
-# No garantiza el camino optimo, solo encuentra uno.
-# ============================================================
+
 def dfs():
     if not g.hay_grafo():
         return
 
     utils.encabezado(
         "BUSQUEDA POR PROFUNDIDAD (DFS)",
-        "Va al fondo antes de retroceder. Recursiva con backtracking. Usa PILA LIFO."
+        "Va al fondo antes de retroceder. Recursiva con backtracking."
     )
 
-    visitados    = set()
+    visitados = set()
     pasos_hechos = [0]
-    pila_visual  = [g.inicio]  # pila para mostrar visualmente, empieza con el inicio
 
     def explorar(nodo, camino, costo, nivel):
         sangria = "    " + "  " * nivel
@@ -153,112 +138,112 @@ def dfs():
         if nodo in visitados:
             print(f"{sangria}'{nodo}' ya fue visitado, lo salto.")
             return None, 0
+
         visitados.add(nodo)
         pasos_hechos[0] += 1
 
-        print(f"\n{sangria}Paso {pasos_hechos[0]}: POP: '{nodo}'")
-        print(f"{sangria}          PILA ACTUAL: {list(pila_visual)}")
-        print(f"{sangria}          NODOS VISITADOS HASTA AHORA: {visitados}")
+        print(f"\n{sangria}Paso {pasos_hechos[0]}: VISITANDO: '{nodo}'")
+        print(f"{sangria}          NODOS VISITADOS: {visitados}")
         print(f"{sangria}          Camino hasta aqui: {' -> '.join(camino)}")
-
+        # print(f"{sangria}          Costo acumulado: {costo}")
         if nodo == g.meta:
-            print(f"{sangria}          *** META ENCONTRADA ***")
+            print(f"\n{sangria}          *** META ENCONTRADA ***")
             return camino, costo
 
-        vecinos = list(g.grafo.get(nodo, {}).items())
+        vecinos = [
+            (v, p)
+            for v, p in g.grafo.get(nodo, {}).items()
+            if v not in visitados
+        ]
+
         if vecinos:
-            nombres_vecinos = [v for v, _ in vecinos if v not in visitados]
-            if nombres_vecinos:
-                # en DFS los vecinos se apilan al reves porque LIFO saca el ultimo
-                for v in nombres_vecinos:
-                    pila_visual.append(v)
-                print(f"{sangria}          PUSH vecinos: {nombres_vecinos}")
-                print(f"{sangria}          PILA ACTUAL (despues de push): {list(pila_visual)}")
-            else:
-                print(f"{sangria}          Sin vecinos nuevos.")
+            nombres = [v for v, _ in vecinos]
+            print(f"{sangria}          Explorando vecinos: {nombres}")
         else:
-            print(f"{sangria}          Sin vecinos. Retrocediendo...")
-        print()
+            print(f"{sangria}          Sin vecinos nuevos.")
 
         for vecino, peso in vecinos:
-            if vecino not in visitados:
-                encontrado, costo_total = explorar(vecino, camino + [vecino], costo + peso, nivel + 1)
-                if encontrado:
-                    return encontrado, costo_total
+            print(f"{sangria}          BAJANDO A (RECURSION) -> '{vecino}' -> ")
 
-        if vecino in pila_visual:
-            pila_visual.remove(nodo)
-        print(f"{sangria}Ramas de '{nodo}' agotadas. Retrocedo un nivel.")
-        return None, 0
+            encontrado, costo_total = explorar( vecino, camino + [vecino], costo + peso, nivel + 1 )
 
-    camino, costo = explorar(g.inicio, [g.inicio], 0, 0)
-    utils.resultado("DFS", camino, costo, len(visitados))
-
-##como saber q se hizo un buen clon ejejejejej
-# ============================================================
-# BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS)
-#
-# Idea: igual que DFS pero con un LIMITE de profundidad.
-# Si llega al limite, no baja mas aunque haya vecinos.
-# Sirve para evitar que DFS se pierda en ramas muy largas.
-# Si el limite es muy pequeno, puede no encontrar solucion.
-# ============================================================
-def dls():
-    if not g.hay_grafo():
-        return
-
-    try:
-        limite = int(input("Limite de profundidad: "))
-    except ValueError:
-        print("  [!] Ingresa un numero entero.")
-        return
-
-    utils.encabezado(
-        f"BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS, limite={limite})",
-        f"Como DFS pero no baja mas de {limite} niveles."
-    )
-
-    explorados = [0]
-    pasos      = [1]
-
-    def explorar(nodo, camino, costo, nivel):
-        sangria = "    " + "  " * nivel
-        explorados[0] += 1
-
-        print(f"{sangria}Paso {pasos[0]}: '{nodo}'  (nivel {nivel}/{limite}, costo: {costo})")
-        print(f"{sangria}          Camino: {' -> '.join(camino)}")
-        pasos[0] += 1
-
-        if nodo == g.meta:
-            print(f"{sangria}          *** META ENCONTRADA ***")
-            return camino, costo
-
-        # aqui esta la diferencia con DFS: reviso el limite antes de bajar
-        if nivel == limite:
-            print(f"{sangria}          Limite {limite} alcanzado. No bajo mas.")
-            print()
-            return None, 0
-
-        # evito ciclos excluyendo nodos que ya estan en el camino actual
-        vecinos = [(v, p) for v, p in g.grafo.get(nodo, {}).items() if v not in camino]
-        if vecinos:
-            print(f"{sangria}          Vecinos: {[v for v,_ in vecinos]}")
-        else:
-            print(f"{sangria}          Sin vecinos nuevos. Retrocedo.")
-        print()
-
-        for vecino, peso in vecinos:
-            encontrado, costo_total = explorar(vecino, camino + [vecino], costo + peso, nivel + 1)
             if encontrado:
                 return encontrado, costo_total
 
+        print(f"{sangria}           RETROCEDIENDO DESDE (BACKTRACKING) <- '{nodo}'")
+
         return None, 0
 
-    camino, costo = explorar(g.inicio, [g.inicio], 0, 0)
-    utils.resultado(f"DLS (limite={limite})", camino, costo, explorados[0])
+    camino, costo = explorar( g.inicio, [g.inicio], 0, 0 )
+    utils.resultado( "DFS", camino, costo, len(visitados) )
 
+# |---------------------------------------------------------------------------------------------------------------|
+# BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS)
 
-# ============================================================
+def dls(limite):
+    if not g.hay_grafo():
+        return
+
+    utils.encabezado(
+        "BUSQUEDA EN PROFUNDIDAD LIMITADA (DLS)",
+        f"DFS recursivo con limite de profundidad = {limite}"
+    )
+
+    visitados = set()
+    pasos_hechos = [0]
+
+    def explorar(nodo, camino, costo, nivel):
+        sangria = "    " + "  " * nivel
+
+        if nodo in visitados:
+            print(f"{sangria}'{nodo}' ya fue visitado.")
+            return None, 0
+
+        visitados.add(nodo)
+        pasos_hechos[0] += 1
+
+        print(f"\n{sangria}Paso {pasos_hechos[0]}: VISITANDO '{nodo}'")
+        print(f"{sangria}          Nivel actual: {nivel}")
+        print(f"{sangria}          Camino: {' -> '.join(camino)}")
+        # print(f"{sangria}          Costo acumulado: {costo}")
+
+        if nodo == g.meta:
+            print(f"{sangria}          *** META ENCONTRADA ***")
+            return camino, costo
+
+        if nivel == limite:
+            print(f"{sangria}          LIMITE ALCANZADO.")
+            print(f"{sangria}          Retrocediendo...")
+            return None, 0
+
+        vecinos = [
+            (v, p)
+            for v, p in g.grafo.get(nodo, {}).items()
+            if v not in visitados
+        ]
+
+        if vecinos:
+            nombres = [v for v, _ in vecinos]
+            print(f"{sangria}          Explorando vecinos: {nombres}")
+        else:
+            print(f"{sangria}          Sin vecinos nuevos.")
+
+        for vecino, peso in vecinos:
+            print(f"{sangria}          BAJANDO A -> '{vecino}'")
+
+            encontrado, costo_total = explorar( vecino, camino + [vecino], costo + peso, nivel + 1)
+  
+            if encontrado:
+                return encontrado, costo_total
+
+        print(f"{sangria}          RETROCEDIENDO DESDE <- '{nodo}'")
+        return None, 0
+
+    camino, costo = explorar( g.inicio, [g.inicio], 0,0)
+    utils.resultado( "DLS", camino, costo, len(visitados) )
+
+# |---------------------------------------------------------------------------------------------------------------|
+
 # BUSQUEDA POR PROFUNDIDAD ITERATIVA (IDDFS)
 #
 # Idea: repite DLS aumentando el limite de 0, 1, 2, 3...
@@ -266,7 +251,7 @@ def dls():
 # Combina lo mejor de BFS (optimo en pasos) y DFS (poca memoria).
 # La desventaja es que re-explora nodos en cada iteracion,
 # pero en la practica no es tan costoso.
-# ============================================================
+
 def iddfs():
     if not g.hay_grafo():
         return
