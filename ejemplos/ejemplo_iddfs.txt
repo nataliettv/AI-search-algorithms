@@ -1,28 +1,26 @@
-# ================================================================
-#   EJEMPLO PARA BUSQUEDA POR PROFUNDIDAD ITERATIVA (IDDFS)
-# ================================================================
+# IDDS EJEMPLO
 #
 #   IDDFS prueba con limite=0, no encuentra -> prueba limite=1,
 #   no encuentra -> prueba limite=2... hasta que llega a la meta.
 #
 #   Grafo:
 #
-#         A
-#        / \
-#       B   C
-#      /     \
-#     D       E
-#              \
-#               G  <- META (nivel 3 desde A)
+#           A
+#          / \
+#         B   C
+#        / \   \
+#       D   E   F
+#            \
+#             G  <- META (nivel 3 desde A)
+#        
+#   Iteracion 0: solo explora A.  X
+#   Iteracion 1: explora A, B, C.   X
+#   Iteracion 2: explora A, B, D, C, D, E, F   X
+#   Iteracion 3: explora A, B, D, C, D, E, F -> META
 #
-#   Iteracion 0: solo explora A. No es G.
-#   Iteracion 1: explora A, B, C. No es G.
-#   Iteracion 2: explora A, B, D, C, E. No es G.
-#   Iteracion 3: explora A, B, D, C, E, G. Encuentra G!
-#
-#   Se puede ver como "repite" trabajo en cada iteracion,
-#   pero eso es normal en IDDFS.
-# ================================================================
+#   se puede ver como "repite" trabajo en cada iteracion,
+#   es normal en IDDFS.
+
 
 ESTADOS
 A G
@@ -31,5 +29,6 @@ TRANSICIONES
 A B 1
 A C 1
 B D 1
-C E 1
+B E 1
 E G 1
+C F 1

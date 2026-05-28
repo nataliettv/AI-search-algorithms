@@ -65,7 +65,6 @@ def bfs():
 #
 # Idea: igual que BFS pero usa una COLA DE PRIORIDAD.
 # Siempre expande el nodo con MENOR COSTO ACUMULADO g(n).
-# No usa heuristica, solo el costo real del camino.
 # Garantiza encontrar el camino de MENOR COSTO.
 # ============================================================
 def ucs():
@@ -245,12 +244,6 @@ def dls(limite):
 # |---------------------------------------------------------------------------------------------------------------|
 
 # BUSQUEDA POR PROFUNDIDAD ITERATIVA (IDDFS)
-#
-# Idea: repite DLS aumentando el limite de 0, 1, 2, 3...
-# hasta que encuentra la solucion.
-# Combina lo mejor de BFS (optimo en pasos) y DFS (poca memoria).
-# La desventaja es que re-explora nodos en cada iteracion,
-# pero en la practica no es tan costoso.
 
 def iddfs():
     if not g.hay_grafo():
@@ -272,10 +265,12 @@ def iddfs():
 
         if nodo == g.meta:
             print(f"{sangria}          *** META ENCONTRADA ***")
+            print(f"{sangria}          Camino: {' -> '.join(camino)}")
+            # print(f"{sangria}          Costo total: {costo}")
             return camino, costo
 
         if nivel == limite:
-            print(f"{sangria}          Limite alcanzado.")
+            print(f"{sangria}          LÍMITE ALCANZADO.")
             return None, 0
 
         for vecino, peso in g.grafo.get(nodo, {}).items():
@@ -290,7 +285,7 @@ def iddfs():
 
     # voy aumentando el limite hasta encontrar o agotar el grafo
     for limite in range(len(g.grafo) + 1):
-        print(f"\n  ========= Iteracion con limite = {limite} =========")
+        print(f"\n  ========= ITERACIÓN CON LIMITE = {limite} =========")
         paso = [1]
         camino, costo = dls_interno(g.inicio, [g.inicio], 0, 0, limite, paso)
 
@@ -298,20 +293,24 @@ def iddfs():
             utils.resultado(f"IDDFS (solucion con limite={limite})", camino, costo, total_explorados[0])
             return
 
-        print(f"\n  --> No hay solucion con limite {limite}. Aumento a {limite + 1}.")
+        print(f"\n  --> NO HAY SOLUCION CON LIMITE: {limite}. + AUMENTANDO A: {limite + 1}.")
 
     utils.resultado("IDDFS", None, 0, total_explorados[0])
 
+    #IDDFS necesita revisitar nodos porque cada iteración reinicia la búsqueda desde 
+    # la raíz con un límite mayor de profundidad.
+    #  Esto permite alcanzar niveles más profundos progresivamente.
 
-# ============================================================
+# |---------------------------------------------------------------------------------------------------------------|
+
 # BUSQUEDA AVARA (GREEDY BEST-FIRST)
-#
+
 # Idea: usa SOLO la heuristica h(n) para decidir que expandir.
 # h(n) es una estimacion de que tan lejos esta el nodo de la meta.
 # Siempre elige el nodo que parece estar MAS CERCA de la meta.
 # IGNORA el costo real g(n) del camino recorrido.
 # Por eso NO garantiza el camino optimo.
-# ============================================================
+
 def avara():
     if not g.hay_grafo():
         return
