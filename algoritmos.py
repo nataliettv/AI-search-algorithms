@@ -4,7 +4,6 @@ import grafo as g
 import utils
 
 # |---------------------------------------------------------------------------------------------------------------|
-
 # BUSQUEDA POR AMPLITUD (BFS) #LISTO
 def bfs():
     if not g.hay_grafo():
@@ -12,7 +11,7 @@ def bfs():
 
     utils.encabezado(
         "BUSQUEDA POR AMPLITUD (BFS)",
-        "Explora nivel por nivel. Usa COLA FIFO. No considera costos."
+        "Explora nivel por nivel. Usa COLA (FIFO)"
     )
 
     cola = deque()
@@ -30,7 +29,7 @@ def bfs():
         print(f"           QUEUE ACTUAL: {pendientes}")
         print(f"           NODOS VISITADOS HASTA AHORA: {visitados}")
         print(f"           Camino hasta aquí: {' -> '.join(camino)}")
-        # print(f"           Costo acumulado:   {costo}")   # no tan relevante en BFS
+        # print(f"           Costo acumulado:   {costo}")
 
         if nodo == g.meta:
             print(f"\n           *** META ENCONTRADA ***")
@@ -44,7 +43,7 @@ def bfs():
                 visitados.add(vecino)  
                 cola.append( (vecino, camino + [vecino], costo + peso) )
                 vecinos_nuevos.append(vecino)
-                # vecinos_nuevos.append(f"{vecino}(c:{costo+peso})")   # con costo
+                # vecinos_nuevos.append(f"{vecino}(c:{costo+peso})")
 
         if vecinos_nuevos:
             print(f"           ENCOLAR VECINOS: {vecinos_nuevos}")
@@ -184,7 +183,8 @@ def dfs():
         return None, 0
 
     camino, costo = explorar( g.inicio, [g.inicio], 0, 0 )
-    utils.resultado( "DFS", camino, costo, len(visitados) )
+    utils.resultado( "DFS", camino, len(visitados) )
+    # utils.resultado( "DFS", camino, costo, len(visitados) )
 
 # |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS)
@@ -249,7 +249,8 @@ def dls(limite):
         return None, 0
 
     camino, costo = explorar( g.inicio, [g.inicio], 0,0)
-    utils.resultado( "DLS", camino, costo, len(visitados) )
+    utils.resultado( "DLS", camino, len(visitados) )
+    # utils.resultado( "DLS", camino, costo, len(visitados) )
 
 # |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA POR PROFUNDIDAD ITERATIVA (IDDFS)
@@ -292,7 +293,7 @@ def iddfs():
 
         return None, 0
 
-    # voy aumentando el limite hasta encontrar o agotar el grafo
+    # aumentamos el limite hasta encontrar o agotar el grafo
     for limite in range(len(g.grafo) + 1):
         print(f"\n  ========= ITERACIÓN CON LIMITE = {limite} =========")
         paso = [1]
@@ -307,17 +308,11 @@ def iddfs():
     utils.resultado("IDDFS", None, 0, total_explorados[0])
 
     #IDDFS necesita revisitar nodos porque cada iteración reinicia la búsqueda desde 
-    # la raíz con un límite mayor de profundidad.
-    #  Esto permite alcanzar niveles más profundos progresivamente.
+    # la raíz con un límite mayor de profundidad
+    #  esto permite alcanzar niveles más profundos progresivamente
 
 # |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA AVARA (GREEDY BEST-FIRST)
-
-# Idea: usa SOLO la heuristica h(n) para decidir que expandir.
-# h(n) es una estimacion de que tan lejos esta el nodo de la meta.
-# Siempre elige el nodo que parece estar MAS CERCA de la meta.
-# IGNORA el costo real g(n) del camino recorrido.
-# Por eso NO garantiza el camino optimo.
 
 def avara():
     if not g.hay_grafo():
@@ -330,8 +325,6 @@ def avara():
         "Usa solo h(n). Ignora el costo real g(n). No garantiza optimo."
     )
 
-    # cola de prioridad ordenada por h(n)
-    # guarda: (h, nodo, camino, costo_real)
     cola = []
     h_inicio = g.heuristicas.get(g.inicio, 0)
     heapq.heappush(cola, (h_inicio, g.inicio, [g.inicio], 0))
@@ -346,12 +339,12 @@ def avara():
             continue
         visitados.add(nodo)
 
-        print(f"\n  Paso {paso}: Saco '{nodo}'  porque h({nodo}) = {h}  (el menor disponible)")
-        print(f"           Costo real recorrido g = {costo}  (la avara lo ignora)")
-        print(f"           Camino: {' -> '.join(camino)}")
+        print(f"\n  Paso {paso}: Saco '{nodo}'  porque h({nodo}) = {h}  (EL MENOR h(n) DISPONIBLE)")
+        # print(f"           Costo real recorrido g = {costo}") //greedy lo ignora, es comparacion con ucs si se requiere just in case jeje
+        print(f"           Camino recorrido: {' -> '.join(camino)}")
 
         if nodo == g.meta:
-            print(f"           *** META ENCONTRADA ***")
+            print(f"\n           *** META ENCONTRADA ***")
             utils.resultado("Busqueda Avara (Greedy)", camino, costo, len(visitados))
             return
 
@@ -363,14 +356,13 @@ def avara():
                 vecinos_nuevos.append(f"{vecino}(h={h_vecino})")
 
         if vecinos_nuevos:
-            print(f"           Agrego: {', '.join(vecinos_nuevos)}")
+            print(f"           Agrego a nodos por explorar: {', '.join(vecinos_nuevos)}")
 
         frontera = sorted([(x[0], x[1]) for x in cola])
-        print(f"           Frontera por h(n): {frontera}")
+        print(f"           CAMINOS DISPONIBLES por h(n): {frontera}")
         paso += 1
 
     utils.resultado("Busqueda Avara (Greedy)", None, 0, len(visitados))
-
 
 # ============================================================
 # BUSQUEDA A*
@@ -438,7 +430,7 @@ def a_estrella():
             print(f"           Agrego: {', '.join(vecinos_nuevos)}")
 
         frontera = sorted([(x[0], x[2]) for x in cola])
-        print(f"           Frontera por f(n): {frontera}")
+        print(f"           CAMINOS DISPONIBLES por f(n): {frontera}")
         paso += 1
 
     utils.resultado("A*", None, 0, len(visitados))

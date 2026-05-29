@@ -1,6 +1,6 @@
 # EJEMPLO BFS
 #
-#   Grafo:
+#   grafo:
 #
 #           A
 #          / \

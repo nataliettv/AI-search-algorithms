@@ -1,24 +1,11 @@
-# ============================================================
-#   grafo.py
-#   Aqui se maneja todo lo relacionado con el grafo:
+#   aqui se maneja todo lo relacionado con el grafo:
 #   - cargar desde teclado
 #   - cargar desde archivo
 #   - mostrar el grafo
-#
-#   El grafo se representa como un diccionario de diccionarios:
-#
-#   grafo = {
-#       'A': {'B': 1, 'C': 4},   <- de A puedo ir a B (costo 1) o C (costo 4)
-#       'B': {'D': 2, 'E': 5},   <- de B puedo ir a D (costo 2) o E (costo 5)
-#       ...
-#   }
-#
-#   heuristicas = {
-#       'A': 6,   <- h(A) = 6, estimacion de cuanto falta de A a la meta
-#       'B': 4,
-#       ...
-#   }
-# ============================================================
+
+
+#   el grafo lo representamos como un diccionario de diccionarios porque  es una forma facil de guardar los nodos, 
+#   sus vecinos y los costos de las transiciones
 
 # estas variables son globales, todos los archivos las importan de aqui
 grafo       = {}
@@ -26,17 +13,12 @@ heuristicas = {}
 inicio      = ""
 meta        = ""
 
-
-def cargar_teclado():
-    """Pide al usuario que escriba el grafo directamente en consola."""
+def cargar_teclado(): #carga el grafo desde el teclado, pidiendo al usuario que ingrese los estados, transiciones y heuristicas
     global grafo, heuristicas, inicio, meta
     grafo = {}
     heuristicas = {}
 
     print("\n--- CAPTURA DEL ESPACIO DE ESTADOS ---")
-
-    # el estado inicial es donde empieza la busqueda
-    # el estado final (meta) es a donde queremos llegar
     inicio = input("Estado inicial: ").strip()
     meta   = input("Estado final:   ").strip()
 
@@ -46,12 +28,12 @@ def cargar_teclado():
     print("Escribe 'fin' cuando termines.\n")
 
     while True:
-        linea = input("Transicion: ").strip()
+        linea = input("Transición: ").strip()
         if linea.lower() == "fin":
             break
         partes = linea.split()
         if len(partes) != 3:
-            print("  [!] Formato: origen destino costo  (3 valores separados por espacio)")
+            print("  [!!] Formato: origen destino costo  (3 valores separados por espacio) [!!]")
             continue
         origen, destino, costo = partes[0], partes[1], float(partes[2])
 
@@ -76,28 +58,27 @@ def cargar_teclado():
             break
         partes = linea.split()
         if len(partes) != 2:
-            print("  [!] Formato: nodo valor")
+            print(f"\n  [!!] Formato: nodo valor [!!]")
             continue
         heuristicas[partes[0]] = float(partes[1])
 
-    print("\n[OK] Grafo guardado correctamente.")
+    print(f"\n[OK] Grafo guardado correctamente.")
 
 
 def cargar_archivo(nombre_archivo=None):
-    """Carga el grafo desde un archivo .txt con formato definido."""
     global grafo, heuristicas, inicio, meta
     grafo = {}
     heuristicas = {}
 
     if nombre_archivo is None:
-        nombre_archivo = input("\nNombre del archivo (ej: ejemplos/ejemplo_bfs.txt): ").strip()
+        nombre_archivo = input(f"\nNombre del archivo (ej: ejemplos/ejemplo_bfs.txt): ").strip()
 
     try:
         archivo = open(nombre_archivo, "r")
         lineas  = archivo.readlines()
         archivo.close()
     except FileNotFoundError:
-        print(f"  [!] No encontre el archivo '{nombre_archivo}'.")
+        print(f"\n  [!!] No encontre el archivo '{nombre_archivo}'. [!!]")
         return False
 
     seccion = ""
@@ -134,39 +115,36 @@ def cargar_archivo(nombre_archivo=None):
         elif seccion == "heuristicas" and len(partes) == 2:
             heuristicas[partes[0]] = float(partes[1])
 
-    print(f"[OK] Grafo cargado desde '{nombre_archivo}'.")
+    print(f"\n[OK] Grafo cargado desde '{nombre_archivo}'.")
     return True
 
 
-def ver_grafo():
-    """Muestra el grafo cargado actualmente."""
+def ver_grafo(): #muestra el grafo actual cargado, con sus conexiones y heuristicas (si las tiene)
     if not grafo:
-        print("\n  [!] Todavia no has cargado ningun grafo.")
+        print(f"\n  [!!] Todavía no has cargado ningun grafo. [!!]")
         return
 
-    print(f"\n  Inicio: {inicio}   |   Meta: {meta}")
-    print("  Conexiones del grafo:")
+    print(f"\n  Inicio: {inicio}   |   Meta: {meta}") 
+    print(f"\n  Conexiones del grafo:")
     for nodo in grafo:
         for vecino, costo in grafo[nodo].items():
             print(f"    {nodo}  -->  {vecino}   (costo: {costo})")
     if heuristicas:
-        print("  Heuristicas h(n):")
+        print(f"\n  Heuristicas h(n):")
         for nodo, h in heuristicas.items():
             print(f"    h({nodo}) = {h}")
 
 
-def hay_grafo():
-    """Revisa que haya un grafo cargado antes de correr cualquier algoritmo."""
+def hay_grafo(): #validacion para algoritmos que necesitan un grafo cargado
     if not grafo or inicio == "" or meta == "":
-        print("\n  [!] Primero carga un grafo (opcion 1 o 2 del menu).")
+        print(f"\n  [!!] Primero carga un grafo (opcion 1 o 2 del menu). [!!]")
         return False
     return True
 
 
-def hay_heuristicas():
-    """Revisa que haya heuristicas (necesario para Avara y A*)."""
+def hay_heuristicas(): #validacion para algoritmos que necesitan heuristicas
     if not heuristicas:
-        print("\n  [!] Este algoritmo necesita heuristicas h(n).")
+        print(f"\n  [!!] Este algoritmo necesita heuristicas h(n). [!!]")
         print("       Carga un grafo que tenga la seccion HEURISTICAS.")
         return False
     return True

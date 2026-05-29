@@ -1,45 +1,42 @@
-# ================================================================
-#   EJEMPLO PARA BUSQUEDA AVARA (GREEDY)
-# ================================================================
+#  EJEMPLO (GREEDY)
+# 
 #
-#   La Busqueda Avara solo mira h(n): la estimacion de que tan
-#   lejos esta cada nodo de la meta. Ignora el costo real.
+#   greedy solo mira h(n): la estimacion de que tan
+#   lejos esta cada nodo de la meta
+#          **ignora el costo real**
 #
-#   Grafo:
+#   grafo:
 #
 #           A
-#          / \
-#         B   C
-#        /     \
-#       D       G  <- META
-#        \
-#         G  <- META (camino caro)
+          /   \
+        B      C
+      /   \     \         h(n)= estimacion de distancia a G
+     D     E     F
+      \    |    /
+         \ |  /
+           G
 #
-#   h(n) = estimacion de distancia a G:
-#     h(A)=3, h(B)=2, h(C)=1, h(D)=1, h(G)=0
+#   
 #
-#   La avara elegira C porque tiene h(C)=1, el menor.
-#   Llega por A -> C -> G con costo real = 10 + 1 = 11
-#
-#   Pero el camino optimo real era A -> B -> D -> G con costo = 1+1+1 = 3
-#   La avara se equivoco porque solo miro h(n) y no el costo real.
-#
-#   Este ejemplo demuestra que la Busqueda Avara NO es optima.
-# ================================================================
 
 ESTADOS
 A G
 
 TRANSICIONES
 A B 1
-A C 10
-B D 1
-C G 1
-D G 1
+A C 1
+B D 2
+B E 3
+C F 10
+F G 1
+E G 7
+D G 2
 
 HEURISTICAS
-A 3
-B 2
-C 1
-D 1
+A 7
+B 6
+C 5
+D 4
+E 3
+F 2
 G 0
