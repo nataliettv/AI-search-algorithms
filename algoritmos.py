@@ -364,17 +364,9 @@ def avara():
 
     utils.resultado("Busqueda Avara (Greedy)", None, 0, len(visitados))
 
-# ============================================================
+# |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA A*
-#
-# Idea: combina UCS y Avara.
-# Usa f(n) = g(n) + h(n)
-#   g(n) = costo REAL del camino recorrido hasta n
-#   h(n) = estimacion heuristica de n a la meta
-#   f(n) = estimacion del costo total pasando por n
-# Siempre expande el nodo con menor f(n).
-# Si h(n) es admisible (nunca sobreestima), garantiza el optimo.
-# ============================================================
+
 def a_estrella():
     if not g.hay_grafo():
         return
@@ -433,3 +425,4 @@ def a_estrella():
 
     utils.resultado("A*", None, 0, len(visitados))
 
+# |---------------------------------------------------------------------------------------------------------------|
