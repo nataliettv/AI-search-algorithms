@@ -65,7 +65,7 @@ def cargar_teclado(): #carga el grafo desde el teclado, pidiendo al usuario que 
     print(f"\n[OK] Grafo guardado correctamente.")
 
 
-def cargar_archivo(nombre_archivo=None):
+def cargar_archivo(nombre_archivo=None): 
     global grafo, heuristicas, inicio, meta
     grafo = {}
     heuristicas = {}
@@ -118,6 +118,32 @@ def cargar_archivo(nombre_archivo=None):
     print(f"\n[OK] Grafo cargado desde '{nombre_archivo}'.")
     return True
 
+def cargar_ejemplo():
+    print("\n  Ejemplos disponibles:")
+    print("   1. ejemplos/ejemplo_bfs.txt")
+    print("   2. ejemplos/ejemplo_ucs.txt")
+    print("   3. ejemplos/ejemplo_dfs.txt")
+    print("   4. ejemplos/ejemplo_dls.txt")
+    print("   5. ejemplos/ejemplo_iddfs.txt")
+    print("   6. ejemplos/ejemplo_avara.txt")
+    print("   7. ejemplos/ejemplo_a_estrella.txt")
+
+    opcion = input(f"\n  Elige un ejemplo (1-7): ").strip()
+
+    archivos = {
+        "1": "ejemplos/ejemplo_bfs.txt",
+        "2": "ejemplos/ejemplo_ucs.txt",
+        "3": "ejemplos/ejemplo_dfs.txt",
+        "4": "ejemplos/ejemplo_dls.txt",
+        "5": "ejemplos/ejemplo_iddfs.txt",
+        "6": "ejemplos/ejemplo_avara.txt",
+        "7": "ejemplos/ejemplo_a_estrella.txt",
+    }
+
+    if opcion in archivos:
+        cargar_archivo(archivos[opcion])
+    else:
+        print("  [!!] Opcion NO valida [!!]")
 
 def ver_grafo(): #muestra el grafo actual cargado, con sus conexiones y heuristicas (si las tiene)
     if not grafo:

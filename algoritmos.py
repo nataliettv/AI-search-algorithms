@@ -270,7 +270,7 @@ def iddfs():
         total_explorados[0] += 1
         sangria = "      " + "  " * nivel
 
-        print(f"{sangria}Paso {paso[0]}: '{nodo}'  (nivel {nivel}/{limite}, costo: {costo})")
+        print(f"{sangria}Paso {paso[0]}: VISITANDO '{nodo}'  (nivel {nivel}/{limite}, costo: {costo})")
         paso[0] += 1
 
         if nodo == g.meta:
@@ -339,7 +339,7 @@ def avara():
             continue
         visitados.add(nodo)
 
-        print(f"\n  Paso {paso}: Saco '{nodo}'  porque h({nodo}) = {h}  (EL MENOR h(n) DISPONIBLE)")
+        print(f"\n  Paso {paso}: VISITANDO '{nodo}'  porque h({nodo}) = {h}  (EL MENOR h(n) DISPONIBLE)")
         # print(f"           Costo real recorrido g = {costo}") //greedy lo ignora, es comparacion con ucs si se requiere just in case jeje
         print(f"           Camino recorrido: {' -> '.join(camino)}")
 
@@ -390,8 +390,6 @@ def a_estrella():
     h0 = g.heuristicas.get(g.inicio, 0)
     f0 = g0 + h0
 
-    # cola de prioridad ordenada por f(n)
-    # guarda: (f, g_costo, nodo, camino)
     cola = []
     heapq.heappush(cola, (f0, g0, g.inicio, [g.inicio]))
 
@@ -406,7 +404,7 @@ def a_estrella():
         visitados.add(nodo)
 
         h = g.heuristicas.get(nodo, 0)
-        print(f"\n  Paso {paso}: Saco '{nodo}'  (menor f(n) disponible = {f})")
+        print(f"\n  Paso {paso}: VISITANDO '{nodo}'  (menor f(n) disponible = {f})")
         print(f"           g({nodo}) = {costo_g}   <- costo real recorrido")
         print(f"           h({nodo}) = {h}   <- estimacion heuristica a la meta")
         print(f"           f({nodo}) = {costo_g} + {h} = {f}")
@@ -434,3 +432,4 @@ def a_estrella():
         paso += 1
 
     utils.resultado("A*", None, 0, len(visitados))
+

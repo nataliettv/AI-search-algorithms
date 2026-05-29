@@ -1,35 +1,23 @@
-# ================================================================
-#   EJEMPLO PARA BUSQUEDA A*
-# ================================================================
+#  EJEMPLO A*
 #
 #   A* usa f(n) = g(n) + h(n)
 #     g(n) = costo real acumulado hasta n
 #     h(n) = estimacion heuristica de n a la meta
 #
-#   Este es el MISMO grafo del ejemplo Avara.
-#   Asi puedes comparar como A* toma una decision diferente.
+#    MISMO grafo del ejemplo greedy
+#   comparaciones 
 #
-#   Grafo:
+#   grafo:
 #
 #           A
-#          / \
-#        1/   \10
-#        B     C
-#       1 \     \ 1
-#          D     G  <- META
-#         1 \
-#            G  <- META
-#
-#   Calculando f(n) = g + h para cada opcion desde A:
-#     Vecino B:  g=1,  h=2 -> f=3
-#     Vecino C:  g=10, h=1 -> f=11
-#
-#   A* elige B (f=3 < f=11).
-#   Luego desde B -> D: g=2, h=1 -> f=3
-#   Luego D -> G: g=3, h=0 -> f=3  -> ENCONTRADO con costo 3
-#
-#   A* encontro el camino OPTIMO A->B->D->G (costo 3).
-#   La Avara habia encontrado A->C->G (costo 11). Mucha diferencia!
+          1/   \1
+        B      C
+      2/ 3\     \ 10       
+     D     E     F
+      2\  7|    /1
+         \ |  /
+           G
+
 # ================================================================
 
 ESTADOS
@@ -37,14 +25,20 @@ A G
 
 TRANSICIONES
 A B 1
-A C 10
-B D 1
-C G 1
-D G 1
+A C 1
+B D 2
+B E 3
+C F 10
+F G 1
+E G 7
+D G 2
 
 HEURISTICAS
-A 3
-B 2
-C 1
-D 1
+A 7
+B 6
+C 5
+D 4
+E 3
+F 2
 G 0
+
