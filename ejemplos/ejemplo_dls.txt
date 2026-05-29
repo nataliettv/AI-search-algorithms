@@ -21,8 +21,7 @@
 #   Si pones limite = 3: llega exactamente a G, encuentra solucion
 #   Si pones limite = 6: tambien llega, el limite simplemente no se alcanza
 #
-#   Prueba con limite 2, 3 y luego con limite 4 para ver la diferencia
-# ================================================================
+#   probar con limite 2, 3 y luego con limite 4 para ver la diferencia
 
 ESTADOS
 A G

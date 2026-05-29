@@ -1,4 +1,5 @@
 # DFS EJEMPLO
+
 #   DFS va lo mas profundo posible por la primera rama que encuentra.
 #   Si no llega a la meta, retrocede (backtracking) y prueba otra.
 #
@@ -19,7 +20,6 @@
 #
 #    *** el orden de exploracion depende del orden en que
 #   esten las transiciones en el archivo
-# ================================================================
 
 ESTADOS
 A G

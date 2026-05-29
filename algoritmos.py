@@ -59,25 +59,19 @@ def bfs():
     utils.resultado("BFS", None, 0, len(visitados))
 
 # |---------------------------------------------------------------------------------------------------------------|
-
-# ============================================================
 # BUSQUEDA POR COSTO UNIFORME (UCS)
-#
-# Idea: igual que BFS pero usa una COLA DE PRIORIDAD.
-# Siempre expande el nodo con MENOR COSTO ACUMULADO g(n).
-# Garantiza encontrar el camino de MENOR COSTO.
-# ============================================================
+
 def ucs():
     if not g.hay_grafo():
         return
 
     utils.encabezado(
         "BUSQUEDA POR COSTO UNIFORME (UCS)",
-        "Siempre expande el de menor costo g(n). No usa heuristica. Garantiza optimo."
+        "Expande siempre el nodo con menor costo acumulado g(n). Garantiza solución óptima con costos positivos."
     )
 
-    # cola de prioridad: (costo_acumulado, nodo, camino)
-    # heapq siempre pone el de menor costo primero
+    import heapq
+
     cola = []
     heapq.heappush(cola, (0, g.inicio, [g.inicio]))
 
@@ -85,33 +79,49 @@ def ucs():
     paso = 1
 
     while cola:
-        costo, nodo, camino = heapq.heappop(cola)   # saco el de menor costo
+
+        costo, nodo, camino = heapq.heappop(cola)
 
         if nodo in visitados:
             continue
+
         visitados.add(nodo)
 
-        print(f"\n  Paso {paso}: Saco '{nodo}'  (menor g(n) disponible = {costo})")
-        print(f"           Camino: {' -> '.join(camino)}")
-        print(f"           g({nodo}) = {costo}  (costo real recorrido)")
+        print("\n" + "=" * 60)
+        print(f"Paso {paso}")
+        print(f"Expandiendo nodo: {nodo}")
+        print(f"Costo acumulado g(n): {costo}")
+        print(f"Camino actual: {' -> '.join(camino)}")
+        print("=" * 60)
 
         if nodo == g.meta:
-            print(f"           *** META ENCONTRADA ***")
+            print("\nMeta encontrada")
+            print(f"Camino final: {' -> '.join(camino)}")
+            print(f"Costo total mínimo: {costo}")
             utils.resultado("UCS", camino, costo, len(visitados))
             return
 
-        vecinos_nuevos = []
+        print("\nGenerando sucesores:")
+
         for vecino, peso in g.grafo.get(nodo, {}).items():
+
             if vecino not in visitados:
+
                 nuevo_costo = costo + peso
-                heapq.heappush(cola, (nuevo_costo, vecino, camino + [vecino]))
-                vecinos_nuevos.append(f"{vecino}(g={nuevo_costo})")
 
-        if vecinos_nuevos:
-            print(f"           Agrego: {', '.join(vecinos_nuevos)}")
+                print(f"  Transición: {nodo} -> {vecino}")
+                print(f"    Costo del paso: {peso}")
+                print(f"    Costo acumulado g(n): {nuevo_costo}")
 
-        frontera = sorted([(x[0], x[1]) for x in cola])
-        print(f"           Frontera por g(n): {frontera}")
+                heapq.heappush(
+                    cola,
+                    (nuevo_costo, vecino, camino + [vecino])
+                )
+
+        print("\nCAMINOS PENDIENTES (ordenados por costos, menor siempre al frente):")
+        for c, n, _ in sorted(cola):
+            print(f"  Nodo: {n} | g(n): {c}")
+
         paso += 1
 
     utils.resultado("UCS", None, 0, len(visitados))
@@ -242,7 +252,6 @@ def dls(limite):
     utils.resultado( "DLS", camino, costo, len(visitados) )
 
 # |---------------------------------------------------------------------------------------------------------------|
-
 # BUSQUEDA POR PROFUNDIDAD ITERATIVA (IDDFS)
 
 def iddfs():
@@ -302,7 +311,6 @@ def iddfs():
     #  Esto permite alcanzar niveles más profundos progresivamente.
 
 # |---------------------------------------------------------------------------------------------------------------|
-
 # BUSQUEDA AVARA (GREEDY BEST-FIRST)
 
 # Idea: usa SOLO la heuristica h(n) para decidir que expandir.
