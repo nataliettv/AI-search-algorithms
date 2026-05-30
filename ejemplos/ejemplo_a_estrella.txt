@@ -29,9 +29,9 @@ A C 1
 B D 2
 B E 3
 C F 10
-F G 1
-E G 7
 D G 2
+E G 7
+F G 1
 
 HEURISTICAS
 A 7

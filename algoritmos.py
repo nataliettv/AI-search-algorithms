@@ -373,7 +373,13 @@ def avara():
         print(f"           Camino recorrido: {' -> '.join(camino)}")
 
         if nodo == g.meta:
+            heuristica_total = sum(
+                g.heuristicas.get(n, 0)
+                for n in camino
+           )
             print(f"\n           *** META ENCONTRADA ***")
+            print(f"           Suma de heuristicas del camino: {heuristica_total}")
+
             utils.resultado("Busqueda Avara (Greedy)", camino, costo, len(visitados))
             return
 
@@ -443,7 +449,7 @@ def a_estrella():
                 nuevo_h = g.heuristicas.get(vecino, 0)
                 nuevo_f = nuevo_g + nuevo_h
                 heapq.heappush(cola, (nuevo_f, nuevo_g, vecino, camino + [vecino]))
-                vecinos_nuevos.append(f"{vecino}(g={nuevo_g} h={nuevo_h} f={nuevo_f})")
+                vecinos_nuevos.append(f"{vecino}(g= {nuevo_g} + h= {nuevo_h} = f= {nuevo_f})")
 
         if vecinos_nuevos:
             print(f"           Agrego: {', '.join(vecinos_nuevos)}")
