@@ -127,8 +127,9 @@ def cargar_ejemplo():
     print("   5. ejemplos/ejemplo_iddfs.txt")
     print("   6. ejemplos/ejemplo_avara.txt")
     print("   7. ejemplos/ejemplo_a_estrella.txt")
+    print("   8. ejemplos/romania.txt")
 
-    opcion = input(f"\n  Elige un ejemplo (1-7): ").strip()
+    opcion = input(f"\n  Elige un ejemplo (1-8): ").strip()
 
     archivos = {
         "1": "ejemplos/ejemplo_bfs.txt",
@@ -138,6 +139,7 @@ def cargar_ejemplo():
         "5": "ejemplos/ejemplo_iddfs.txt",
         "6": "ejemplos/ejemplo_avara.txt",
         "7": "ejemplos/ejemplo_a_estrella.txt",
+        "8": "ejemplos/romania.txt",
     }
 
     if opcion in archivos:

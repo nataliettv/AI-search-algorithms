@@ -214,8 +214,7 @@ def dfs():
         return None, 0
 
     camino, costo = explorar( g.inicio, [g.inicio], 0, 0 )
-    utils.resultado( "DFS", camino, len(visitados) )
-    # utils.resultado( "DFS", camino, costo, len(visitados) )
+    utils.resultado( "DFS", camino, costo, len(visitados) )
 
 # |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA POR PROFUNDIDAD LIMITADA (DLS)
@@ -280,8 +279,7 @@ def dls(limite):
         return None, 0
 
     camino, costo = explorar( g.inicio, [g.inicio], 0,0)
-    utils.resultado( "DLS", camino, len(visitados) )
-    # utils.resultado( "DLS", camino, costo, len(visitados) )
+    utils.resultado( "DLS", camino, costo, len(visitados) )
 
 # |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA POR PROFUNDIDAD ITERATIVA (IDDFS)
