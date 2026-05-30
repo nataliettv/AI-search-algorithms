@@ -1,7 +1,7 @@
 # IDDS EJEMPLO
 #
 #   IDDFS prueba con limite=0, no encuentra -> prueba limite=1,
-#   no encuentra -> prueba limite=2... hasta que llega a la meta.
+#   no encuentra -> prueba limite=2... hasta que llega a la meta
 #
 #   Grafo:
 #
@@ -19,7 +19,7 @@
 #   Iteracion 3: explora A, B, D, C, D, E, F -> META
 #
 #   se puede ver como "repite" trabajo en cada iteracion,
-#   es normal en IDDFS.
+#   es normal en IDDFS
 
 
 ESTADOS

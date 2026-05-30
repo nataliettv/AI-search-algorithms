@@ -11,51 +11,82 @@ def bfs():
 
     utils.encabezado(
         "BUSQUEDA POR AMPLITUD (BFS)",
-        "Explora nivel por nivel. Usa COLA (FIFO)"
+        "Explora nivel por nivel. Usa una COLA (FIFO)."
     )
 
     cola = deque()
-    cola.append( (g.inicio, [g.inicio], 0) )
+    cola.append((g.inicio, [g.inicio], 0))
 
     visitados = set()
     visitados.add(g.inicio)
     paso = 1
 
     while cola:
+
         nodo, camino, costo = cola.popleft()
 
+        nivel = len(camino) - 1
+
+        print(f"\n{'='*60}")
+        print(f" PASO {paso}")
+        print(f"{'='*60}")
+
+        print(f" Nodo que se explora ahora: {nodo}")
+        print(f" Nivel actual: {nivel}")
+        print(f" Camino recorrido: {' -> '.join(camino)}")
+        print(f" Nodos descubiertos hasta ahora: {sorted(visitados)}")
+
         pendientes = [x[0] for x in cola]
-        print(f"\n  Paso {paso}: DEQUEUE: '{nodo}'")
-        print(f"           QUEUE ACTUAL: {pendientes}")
-        print(f"           NODOS VISITADOS HASTA AHORA: {visitados}")
-        print(f"           Camino hasta aquí: {' -> '.join(camino)}")
-        # print(f"           Costo acumulado:   {costo}")
+
+        print(f"\n Nodos pendientes por explorar:")
+        if pendientes:
+            print(f" {pendientes}")
+        else:
+            print(" Ninguno")
 
         if nodo == g.meta:
-            print(f"\n           *** META ENCONTRADA ***")
-            utils.resultado("BFS", camino, costo, len(visitados))
+            print(f"\n META ENCONTRADA")
+            print(f" BFS termina porque alcanzó el objetivo.")
+
+            utils.resultado( "BFS", camino, costo, len(visitados))
             return
 
         vecinos_nuevos = []
+
+        print(f"\n Revisando vecinos de '{nodo}':")
+
         for vecino, peso in g.grafo.get(nodo, {}).items():
             if vecino not in visitados:
+                visitados.add(vecino)
+                nuevo_camino = camino + [vecino]
+                nuevo_costo = costo + peso
 
-                visitados.add(vecino)  
-                cola.append( (vecino, camino + [vecino], costo + peso) )
+                cola.append(
+                    (vecino, nuevo_camino, nuevo_costo)
+                )
+
                 vecinos_nuevos.append(vecino)
-                # vecinos_nuevos.append(f"{vecino}(c:{costo+peso})")
 
-        if vecinos_nuevos:
-            print(f"           ENCOLAR VECINOS: {vecinos_nuevos}")
-        else:
-            print(f"           Sin vecinos nuevos.")
+                print(
+                    f"   Se descubre '{vecino}' "
+                    f"y se agrega al final de la cola."
+                )
+
+        if not vecinos_nuevos:
+            print("   No se encontraron vecinos nuevos.")
 
         pendientes = [x[0] for x in cola]
-        print(f"           QUEUE ACTUAL (despues de encolar): {pendientes}")
+
+        print(f"\n Orden de exploracion para los siguientes pasos:")
+
+        if pendientes:
+            print(f" {pendientes}")
+        else:
+            print(" Ninguno")
 
         paso += 1
 
-    utils.resultado("BFS", None, 0, len(visitados))
+    utils.resultado( "BFS", None, 0, len(visitados) )
 
 # |---------------------------------------------------------------------------------------------------------------|
 # BUSQUEDA POR COSTO UNIFORME (UCS)

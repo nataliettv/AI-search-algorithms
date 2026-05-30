@@ -2,13 +2,13 @@
 #
 #   grafo:
 #
-#           A
-#          / \
-#         B   C
-#        / \   \
-#       D   E   F
+#             A
+#          /    \
+#         B       C
+#        / \         \
+#       D   E <- META   F
 #            \
-#             G  <- META
+#             G
 
 ESTADOS
 A E
@@ -16,6 +16,7 @@ A E
 TRANSICIONES
 A B 1
 A C 1
+B E 1
 B D 1
-C E 1
-D E 1
+C F 1
+E G 1
